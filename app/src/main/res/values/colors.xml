@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="primary">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="accent">#03A9F4</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>-->
+
+
+    <color name="primary">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="accent">#03A9F4</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
+
+    <color name="ocean_primary">#2196F3</color>
+    <color name="ocean_primary_dark">#1976D2</color>
+    <color name="ocean_primary_light">#BBDEFB</color>
+    <color name="ocean_accent">#03A9F4</color>
+    <color name="ocean_primary_text">#212121</color>
+    <color name="ocean_secondary_text">#757575</color>
+    <color name="ocean_icons">#FFFFFF</color>
+    <color name="ocean_divider">#BDBDBD</color>
+    <color name="color_radio_btn">#DFDFDF</color>
+
+
+
+    <color name="lime_primary">#8BC34A</color>
+    <color name="lime_primary_dark">#689F38</color>
+    <color name="lime_primary_light">#DCEDC8</color>
+    <color name="lime_accent">#CDDC39</color>
+    <color name="lime_primary_text">#212121</color>
+    <color name="lime_secondary_text">#757575</color>
+    <color name="lime_icons">#212121</color>
+    <color name="lime_divider">#BDBDBD</color>
+
+    <color name="color_white">#FFFFFF</color>
+
+
+    <color name="color_green">#44bd32</color>
+    <color name="color_red">#e84118</color>
+
+</resources>
