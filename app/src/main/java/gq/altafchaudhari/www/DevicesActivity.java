@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,8 +19,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.UUID;
 
 import es.dmoral.toasty.Toasty;
 
@@ -29,6 +33,11 @@ public class DevicesActivity extends AppCompatActivity implements AdapterView.On
     ListView lvNewDevices;
     BluetoothAdapter bluetoothadapter;
     private ProgressDialog progress;
+
+    MyApplication myApplication;
+
+    private boolean isBtConnected = false;
+    static UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private final BroadcastReceiver btBondStateReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -97,6 +106,8 @@ public class DevicesActivity extends AppCompatActivity implements AdapterView.On
         lvNewDevices = findViewById(R.id.lvNewDevices);
         bluetoothDevices = new ArrayList<>();
 
+        myApplication =(MyApplication)getApplication();
+
         IntentFilter filter = new IntentFilter(bluetoothadapter.ACTION_STATE_CHANGED);
         registerReceiver(btBondStateReceiver, filter);
 
@@ -152,15 +163,20 @@ public class DevicesActivity extends AppCompatActivity implements AdapterView.On
         }
         if (bluetoothDevices.get(position).getBondState()==BluetoothDevice.BOND_BONDED)
         {
-            Toasty.success(DevicesActivity.this,deviceName+" Connected Successfully",Toasty.LENGTH_SHORT,true).show();
+            //Toasty.success(DevicesActivity.this,deviceName+" Connected Successfully",Toasty.LENGTH_SHORT,true).show();
             SharedPreferences.Editor editor;
             String sp_name = "usmart_sp";
             SharedPreferences sp = getApplicationContext().getSharedPreferences(sp_name, 0);
             editor = sp.edit();
+
+            myApplication.deviceName = deviceName;
+            myApplication.deviceAddress = deviceAddress;
+
             editor.putString("device_address", deviceAddress);
             editor.putString("device_name", deviceName);
             editor.commit();
             Log.d("DeviceActivity","SP Saved");
+            new ConnectBT().execute();
             finish();
         }
     }
@@ -176,5 +192,57 @@ public class DevicesActivity extends AppCompatActivity implements AdapterView.On
     private void showToast(String s) {
         Toasty.info(getApplicationContext(),s,Toasty.LENGTH_SHORT,true).show();
     }
+
+
+    private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
+    {
+        private boolean ConnectSuccess = true; //if it's here, it's almost connected
+
+        @Override
+        protected void onPreExecute()
+        {
+            // progress = ProgressDialog.show(MainActivity.this, "Connecting...", "Please wait!!!");  //show a progress dialog
+            System.out.println("Conntecting");
+        }
+
+        @Override
+        protected Void doInBackground(Void... devices) //while the progress dialog is shown, the connection is done in background
+        {
+            try
+            {
+                if (myApplication.bluetoothSocket == null || !isBtConnected)
+                {
+                    bluetoothadapter = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
+                    BluetoothDevice device = bluetoothadapter.getRemoteDevice(myApplication.deviceAddress);//connects to the device's address and checks if it's available
+                    myApplication.bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(SPP_UUID);//create a RFCOMM (SPP) connection
+                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+                    myApplication.bluetoothSocket.connect();//start connection
+                }
+            }
+            catch (IOException e)
+            {
+                System.out.println("MyException:"+ e);
+                ConnectSuccess = false;//if the try failed, you can check the exception here
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
+        {
+            super.onPostExecute(result);
+            if (!ConnectSuccess)
+            {
+                showToast("Connection Failed. Is it a SPP Bluetooth? Try again.");
+                //finish();
+            }
+            else
+            {
+                showToast(myApplication.deviceName+" Connected.");
+                isBtConnected = true;
+            }
+            //progress.dismiss();
+        }
+    }
+
 
 }

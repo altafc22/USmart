@@ -24,8 +24,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.gdacciaro.iOSDialog.iOSDialog;
 import com.gdacciaro.iOSDialog.iOSDialogBuilder;
@@ -41,16 +43,16 @@ import vn.luongvo.widget.iosswitchview.SwitchView;
 public class MainActivity extends AppCompatActivity {
 
     SwitchView switchView;
-
-    BluetoothSocket btSocket = null;
     String btDeviceAddress = null;
     String btDeviceName = null;
 
-    private ProgressDialog progress;
+    String message ="";
+    TextView tv_connetivity_status;
+
     private boolean isBtConnected = false;
     static UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
-    final int REQUEST_READ_PHONE_STATE = 1000;
+    MyApplication myApplication;
 
     RadioGroup radioGroup1, radioGroup2, radioGroup3, radioGroup4;
     BluetoothAdapter bluetoothadapter = null;
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("onDestroy", "called");
         super.onDestroy();
         unregisterReceiver(btStateReceiver);
-        unregisterReceiver(btDiscoverReceiver);
+        //unregisterReceiver(btDiscoverReceiver);
     }
 
     @Override
@@ -73,25 +75,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
+        /*SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
         btDeviceAddress = sp.getString("device_address", null);
-        btDeviceName = sp.getString("device_name", null);
+        btDeviceName = sp.getString("device_name", null);*/
 
         System.out.println(btDeviceName+" : "+btDeviceAddress);
 
         initializeaAll();
-        new ConnectBT().execute();
 
-        //turnOnBt();
+        turnOnBt();
         changeStatusBarColor();
 
         switchView.setOnCheckedChangeListener(new SwitchView.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchView switchView, boolean isChecked) {
-                if(isChecked)
-                    turnOnBt();
-                else
-                    turnOffBt();
+
+                    if(isChecked) {
+                        sendDataToDevice("y");
+                        checkAllButtons();
+                    }
+                    else{
+                        sendDataToDevice("x");
+                        clearCheck(1234);
+                    }
             }
         });
 
@@ -158,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 isChecking = true;
+
             }
         });
 
@@ -165,35 +172,39 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    clearCheck(123);
-                    radioGroup4.check(checkedId);
-                    mCheckedId = checkedId;
-                    if(toggle_button_seven.isChecked()){
-                        System.out.println("---G");
-                        sendDataToDevice("g");
+                        isChecking = false;
+                        clearCheck(123);
+                        radioGroup4.check(checkedId);
+                        mCheckedId = checkedId;
+                        if (toggle_button_seven.isChecked()) {
+                            System.out.println("---G");
+                            sendDataToDevice("g");
+                        }
+                        if (toggle_button_eight.isChecked()) {
+                            System.out.println("---H");
+                            sendDataToDevice("h");
+                        }
                     }
-                    if(toggle_button_eight.isChecked()){
-                        System.out.println("---H");
-                        sendDataToDevice("h");
-                    }
-                }
                 isChecking = true;
             }
         });
-
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
-        btDeviceAddress = sp.getString("device_address",null);
-        btDeviceName = sp.getString("device_name",null);
+        //btDeviceAddress = sp.getString("device_address",null);
+        //btDeviceName = sp.getString("device_name",null);
+        btDeviceName = myApplication.deviceName;
+        btDeviceAddress = myApplication.deviceAddress;
         System.out.println(btDeviceName+" : "+btDeviceAddress);
+        if(!btDeviceName.equals(""))
+            tv_connetivity_status.setText(btDeviceName+" Connected");
     }
 
     private void initializeaAll(){
+
+        myApplication = (MyApplication)getApplication();
 
         bluetoothadapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -211,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_seven = findViewById(R.id.toggle_button_seven);
         toggle_button_eight = findViewById(R.id.toggle_button_eight);
 
+        tv_connetivity_status = findViewById(R.id.tv_connetivity_status);
 
         IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         registerReceiver(btStateReceiver, filter3);
@@ -269,25 +281,6 @@ public class MainActivity extends AppCompatActivity {
         Toasty.info(getApplicationContext(),s,Toasty.LENGTH_SHORT,true).show();
     }
 
-    private void turnOnBt() {
-        if(bluetoothadapter == null)
-        {
-            showToast("Bluetooth Not Supported");
-        }
-        else{
-            if(!bluetoothadapter.isEnabled()){
-                startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),1);
-                //showToast("Bluetooth Turned ON");
-                //switchView.setChecked(true);
-            }
-        }
-    }
-
-    private void turnOffBt() {
-        bluetoothadapter.disable();
-        //switchView.setChecked(false);
-    }
-
     public void makeDeviceDiscoverable() {
         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,10);
@@ -302,11 +295,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(MainActivity.this,Settings.class));
     }
 
-    public void goToPairedDevices(View v){
+    /*public void goToPairedDevices(View v){
         startActivity(new Intent(MainActivity.this,DevicesActivity.class));
     }
-
+*/
     private void clearCheck(int num) {
+        if(radioGroup1.getCheckedRadioButtonId() != -1)
+            radioGroup1.clearCheck();
         if(num==234)
         {
             radioGroup2.clearCheck();
@@ -330,13 +325,6 @@ public class MainActivity extends AppCompatActivity {
             radioGroup1.clearCheck();
             radioGroup2.clearCheck();
             radioGroup3.clearCheck();
-        }
-        if(num==1234)
-        {
-            radioGroup1.clearCheck();
-            radioGroup2.clearCheck();
-            radioGroup3.clearCheck();
-            radioGroup4.clearCheck();
         }
 
     }
@@ -400,26 +388,50 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendDataToDevice(String data)
     {
-        if(btDeviceAddress!=null)
+        if(myApplication.deviceAddress.equals(""))
         {
-                if (btSocket!=null)
-                {
-                    try
-                    {
-                        btSocket.getOutputStream().write(data.getBytes());
-                    }
-                    catch (IOException e)
-                    {
-                        showToast("Error");
-                    }
-                }
+            showToast("Please Connect to Device");
+            startActivity(new Intent(MainActivity.this,DevicesActivity.class));
+            switchView.setChecked(false);
         }
-        else {
-            showDilogueBox();
-            clearCheck(1234);
+        else
+        {
+
+            if (myApplication.bluetoothSocket!=null)
+            {
+                try
+                {
+                    System.out.println("Trying to send data");
+                    myApplication.bluetoothSocket.getOutputStream().write(data.getBytes());
+                }
+                catch (IOException e)
+                {
+                    new ConnectBT().execute();
+                    System.out.println("Trying to send data");
+                    try {
+                        myApplication.bluetoothSocket.getOutputStream().write(data.getBytes());
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    //showToast("Error while sending data: "+e);
+                }
+            }
         }
     }
 
+    private void turnOnBt() {
+        if(bluetoothadapter == null)
+        {
+            showToast("Bluetooth Not Supported");
+        }
+        else{
+            if(!bluetoothadapter.isEnabled()){
+                startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),1);
+                //showToast("Bluetooth Turned ON");
+                //switchView.setChecked(true);
+            }
+        }
+    }
 
     private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
     {
@@ -428,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute()
         {
-           // progress = ProgressDialog.show(MainActivity.this, "Connecting...", "Please wait!!!");  //show a progress dialog
+            // progress = ProgressDialog.show(MainActivity.this, "Connecting...", "Please wait!!!");  //show a progress dialog
             System.out.println("Conntecting");
         }
 
@@ -437,17 +449,18 @@ public class MainActivity extends AppCompatActivity {
         {
             try
             {
-                if (btSocket == null || !isBtConnected)
+                if (myApplication.bluetoothSocket == null || !isBtConnected)
                 {
                     bluetoothadapter = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
-                    BluetoothDevice dispositivo = bluetoothadapter.getRemoteDevice(btDeviceAddress);//connects to the device's address and checks if it's available
-                    btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(SPP_UUID);//create a RFCOMM (SPP) connection
+                    BluetoothDevice device = bluetoothadapter.getRemoteDevice(myApplication.deviceAddress);//connects to the device's address and checks if it's available
+                    myApplication.bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(SPP_UUID);//create a RFCOMM (SPP) connection
                     BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    btSocket.connect();//start connection
+                    myApplication.bluetoothSocket.connect();//start connection
                 }
             }
             catch (IOException e)
             {
+                System.out.println("MyException:"+ e);
                 ConnectSuccess = false;//if the try failed, you can check the exception here
             }
             return null;
@@ -463,12 +476,23 @@ public class MainActivity extends AppCompatActivity {
             }
             else
             {
-                showToast("Connected.");
+                if(!btDeviceName.equals(""))
+                    tv_connetivity_status.setText(btDeviceName+" Connected");
+                //showToast(myApplication+" Connected.");
                 isBtConnected = true;
             }
-            progress.dismiss();
+            //progress.dismiss();
         }
     }
 
+    private void checkAllButtons()
+    {
+
+    }
+
+    private void uncheckAllButtons()
+    {
+
+    }
 
 }

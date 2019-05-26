@@ -28,6 +28,11 @@ public class Settings extends AppCompatActivity {
         turnOnBt();
     }
 
+    public void buttonConfiguration(View v)
+    {
+        startActivity(new Intent(Settings.this,DevicesActivity.class));
+    }
+
     private void turnOnBt() {
         if(bluetoothadapter == null)
         {

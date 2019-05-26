@@ -96,6 +96,7 @@
                         android:background="@drawable/radio_button"
                         android:checked="false"
                         android:text="Button 1"
+                        style="@android:"
                         android:fontFamily="@font/segoeui"
                         android:textColor="@color/color_white"
                         android:paddingTop="25dp"
@@ -282,7 +283,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1"
-                android:onClick="goToPairedDevices"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:gravity="center">
 
@@ -295,8 +295,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/segoeui"
+                    android:id="@+id/tv_connetivity_status"
                     android:textColor="@color/primary_text"
-                    android:text="Paired Devices"/>
+                    android:text="No Device Connected"/>
             </LinearLayout>
 
 

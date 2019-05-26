@@ -294,7 +294,6 @@
                 android:orientation="horizontal"
                 android:layout_weight="1"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:onClick="goToPairedDevices"
                 android:gravity="center">
 
                 <ImageView
@@ -307,9 +306,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/segoeui"
-                    android:textSize="20sp"
+                    android:id="@+id/tv_connetivity_status"
                     android:textColor="@color/primary_text"
-                    android:text="Paired Devices"/>
+                    android:textSize="20sp"
+                    android:text="No Device Connected"/>
             </LinearLayout>
 
 
