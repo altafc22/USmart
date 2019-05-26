@@ -96,7 +96,6 @@
                         android:background="@drawable/radio_button"
                         android:checked="false"
                         android:text="Button 1"
-                        style="@android:"
                         android:fontFamily="@font/segoeui"
                         android:textColor="@color/color_white"
                         android:paddingTop="25dp"
