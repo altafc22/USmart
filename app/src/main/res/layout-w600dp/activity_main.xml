@@ -15,8 +15,7 @@
         android:background="@color/color_white"
         android:id="@+id/action_bar_layout">
 
-        <ImageView
-
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
@@ -68,6 +67,11 @@
         android:layout_above="@+id/bottom_bar"
         android:layout_below="@+id/action_bar_layout">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/iv_app_bg"
+            android:scaleType="centerCrop"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -81,183 +85,224 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_weight="2">
+                    android:layout_margin="20dp"
+                    android:layout_gravity="center"
+                    android:weightSum="4"
+                    android:orientation="horizontal">
 
-                    <RadioGroup
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:id="@+id/radioGroup1"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                        <RadioButton
+                        <net.colindodd.toggleimagebutton.ToggleImageButton
+                            xmlns:tib="http://schemas.android.com/apk/res-auto"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:button="@null"
                             android:id="@+id/toggle_button_one"
-                            android:background="@drawable/radio_button"
                             android:checked="false"
-                            android:text="Button 1"
-                            android:layout_margin="25dp"
+                            tib:tib_drawable_on="@drawable/ic_lighting_button_pressed"
+                            tib:tib_drawable_off="@drawable/ic_lighting_button_normal"
                             android:fontFamily="@font/segoeui"
-                            android:textColor="@color/color_white"
-                            android:paddingTop="25dp"
-                            android:drawablePadding="-10dp"
-                            android:drawableTop="@drawable/ic_light_bulb"
-                            android:textAlignment="center"/>
+                            android:textColor="@color/color_white" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_btn_one"
+                            android:textColor="@color/primary_text"
+                            android:text="Button 1"/>
+                    </LinearLayout>
 
-                        <RadioButton
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:button="@null"
-                            android:layout_margin="25dp"
-                            android:id="@+id/toggle_button_two"
-                            android:background="@drawable/radio_button"
-                            android:checked="false"
-                            android:text="Button 2"
-                            android:fontFamily="@font/segoeui"
-                            android:textColor="@color/color_white"
-                            android:paddingTop="25dp"
-                            android:drawablePadding="-10dp"
-                            android:drawableTop="@drawable/ic_light_bulb"
-                            android:textAlignment="center"/>
-                    </RadioGroup>
-
-
-                    <RadioGroup
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
-                        android:id="@+id/radioGroup2"
-                        android:orientation="horizontal">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                        <RadioButton
+                        <net.colindodd.toggleimagebutton.ToggleImageButton
+                            xmlns:tib="http://schemas.android.com/apk/res-auto"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:button="@null"
+                            android:id="@+id/toggle_button_two"
+                            android:checked="false"
+                            tib:tib_drawable_on="@drawable/ic_lighting_button_pressed"
+                            tib:tib_drawable_off="@drawable/ic_lighting_button_normal"
+                            android:fontFamily="@font/segoeui"
+                            android:textColor="@color/color_white" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_btn_two"
+                            android:textColor="@color/primary_text"
+                            android:text="Button 2"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <net.colindodd.toggleimagebutton.ToggleImageButton
+                            xmlns:tib="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:id="@+id/toggle_button_three"
-                            android:background="@drawable/radio_button"
                             android:checked="false"
-                            android:text="Button 3"
-                            android:layout_margin="25dp"
+                            tib:tib_drawable_on="@drawable/ic_lighting_button_pressed"
+                            tib:tib_drawable_off="@drawable/ic_lighting_button_normal"
                             android:fontFamily="@font/segoeui"
-                            android:textColor="@color/color_white"
-                            android:paddingTop="25dp"
-                            android:drawablePadding="-10dp"
-                            android:drawableTop="@drawable/ic_light_bulb"
-                            android:textAlignment="center"/>
+                            android:textColor="@color/color_white" />
 
-                        <RadioButton
+                        <TextView
+                            android:id="@+id/tv_btn_three"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Button 3"
+                            android:textColor="@color/primary_text" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <net.colindodd.toggleimagebutton.ToggleImageButton
+                            xmlns:tib="http://schemas.android.com/apk/res-auto"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:button="@null"
-                            android:layout_margin="25dp"
                             android:id="@+id/toggle_button_four"
-                            android:background="@drawable/radio_button"
                             android:checked="false"
-                            android:text="Button 4"
+                            tib:tib_drawable_on="@drawable/ic_lighting_button_pressed"
+                            tib:tib_drawable_off="@drawable/ic_lighting_button_normal"
                             android:fontFamily="@font/segoeui"
-                            android:textColor="@color/color_white"
-                            android:paddingTop="25dp"
-                            android:drawablePadding="-10dp"
-                            android:drawableTop="@drawable/ic_light_bulb"
-                            android:textAlignment="center"/>
-                    </RadioGroup>
+                            android:textColor="@color/color_white" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_btn_four"
+                            android:textColor="@color/primary_text"
+                            android:text="Button 4"/>
+                    </LinearLayout>
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:gravity="center"
-                    android:layout_weight="2">
+                    android:layout_margin="20dp"
+                    android:layout_gravity="center"
+                    android:weightSum="4"
+                    android:orientation="horizontal">
 
-                    <RadioGroup
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:id="@+id/radioGroup3"
                         android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                        <RadioButton
+                        <net.colindodd.toggleimagebutton.ToggleImageButton
+                            xmlns:tib="http://schemas.android.com/apk/res-auto"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:button="@null"
                             android:id="@+id/toggle_button_five"
-                            android:background="@drawable/radio_button"
                             android:checked="false"
-                            android:text="Button 5"
-                            android:layout_margin="25dp"
+                            tib:tib_drawable_on="@drawable/ic_lighting_button_pressed"
+                            tib:tib_drawable_off="@drawable/ic_lighting_button_normal"
                             android:fontFamily="@font/segoeui"
-                            android:textColor="@color/color_white"
-                            android:paddingTop="25dp"
-                            android:drawablePadding="-10dp"
-                            android:drawableTop="@drawable/ic_light_bulb"
-                            android:textAlignment="center"/>
+                            android:textColor="@color/color_white" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_btn_five"
+                            android:textColor="@color/primary_text"
+                            android:text="Button 5"/>
+                    </LinearLayout>
 
-                        <RadioButton
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:button="@null"
-                            android:layout_margin="25dp"
-                            android:id="@+id/toggle_button_six"
-                            android:background="@drawable/radio_button"
-                            android:checked="false"
-                            android:text="Button 6"
-                            android:fontFamily="@font/segoeui"
-                            android:textColor="@color/color_white"
-                            android:paddingTop="25dp"
-                            android:drawablePadding="-10dp"
-                            android:drawableTop="@drawable/ic_light_bulb"
-                            android:textAlignment="center"/>
-                    </RadioGroup>
-
-
-                    <RadioGroup
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
-                        android:id="@+id/radioGroup4"
-                        android:orientation="horizontal">
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                        <RadioButton
+                        <net.colindodd.toggleimagebutton.ToggleImageButton
+                            xmlns:tib="http://schemas.android.com/apk/res-auto"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:button="@null"
+                            android:id="@+id/toggle_button_six"
+                            android:checked="false"
+                            tib:tib_drawable_on="@drawable/ic_lighting_button_pressed"
+                            tib:tib_drawable_off="@drawable/ic_lighting_button_normal"
+                            android:fontFamily="@font/segoeui"
+                            android:textColor="@color/color_white" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_btn_six"
+                            android:textColor="@color/primary_text"
+                            android:text="Button 6"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <net.colindodd.toggleimagebutton.ToggleImageButton
+                            xmlns:tib="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:id="@+id/toggle_button_seven"
-                            android:background="@drawable/radio_button"
                             android:checked="false"
-                            android:text="Button 7"
-                            android:layout_margin="25dp"
+                            tib:tib_drawable_on="@drawable/ic_lighting_button_pressed"
+                            tib:tib_drawable_off="@drawable/ic_lighting_button_normal"
                             android:fontFamily="@font/segoeui"
-                            android:textColor="@color/color_white"
-                            android:paddingTop="25dp"
-                            android:drawablePadding="-10dp"
-                            android:drawableTop="@drawable/ic_light_bulb"
-                            android:textAlignment="center"/>
+                            android:textColor="@color/color_white" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_btn_seven"
+                            android:textColor="@color/primary_text"
+                            android:text="Button 7"/>
+                    </LinearLayout>
 
-                        <RadioButton
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <net.colindodd.toggleimagebutton.ToggleImageButton
+                            xmlns:tib="http://schemas.android.com/apk/res-auto"
                             android:layout_width="100dp"
                             android:layout_height="100dp"
-                            android:button="@null"
-                            android:layout_margin="25dp"
                             android:id="@+id/toggle_button_eight"
-                            android:background="@drawable/radio_button"
                             android:checked="false"
-                            android:text="Button 8"
+                            tib:tib_drawable_on="@drawable/ic_lighting_button_pressed"
+                            tib:tib_drawable_off="@drawable/ic_lighting_button_normal"
                             android:fontFamily="@font/segoeui"
-                            android:textColor="@color/color_white"
-                            android:paddingTop="25dp"
-                            android:drawablePadding="-10dp"
-                            android:drawableTop="@drawable/ic_light_bulb"
-                            android:textAlignment="center"/>
-                    </RadioGroup>
+                            android:textColor="@color/color_white" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_btn_eight"
+                            android:textColor="@color/primary_text"
+                            android:text="Button 8"/>
+                    </LinearLayout>
+
 
                 </LinearLayout>
 

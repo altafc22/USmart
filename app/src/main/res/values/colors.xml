@@ -28,8 +28,9 @@
     <color name="ocean_icons">#FFFFFF</color>
     <color name="ocean_divider">#BDBDBD</color>
     <color name="color_radio_btn">#DFDFDF</color>
-
-
+    <color name="color_transparent">#00FFFFFF</color>
+    <color name="color_trasperent_gray">#9ddfdfdf</color>
+    <color name="color_trasperent_blue">#ee2196F3</color>
 
     <color name="lime_primary">#8BC34A</color>
     <color name="lime_primary_dark">#689F38</color>

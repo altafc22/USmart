@@ -10,12 +10,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -107,6 +110,7 @@ public class DevicesActivity extends AppCompatActivity implements AdapterView.On
         bluetoothDevices = new ArrayList<>();
 
         myApplication =(MyApplication)getApplication();
+        changeStatusBarColor();
 
         IntentFilter filter = new IntentFilter(bluetoothadapter.ACTION_STATE_CHANGED);
         registerReceiver(btBondStateReceiver, filter);
@@ -186,6 +190,29 @@ public class DevicesActivity extends AppCompatActivity implements AdapterView.On
         super.onDestroy();
         unregisterReceiver(btBondStateReceiver);
         unregisterReceiver(btStateReceiver);
+    }
+
+    private void changeStatusBarColor() {
+        //change notification icon color...
+        View yourView = findViewById(R.id.main_layout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (yourView != null) {
+                yourView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            }
+        }
+
+        // Making notification bar transparent
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        }
+        // making notification bar transparent
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
     }
 
 

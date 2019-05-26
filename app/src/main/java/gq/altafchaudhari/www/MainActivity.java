@@ -12,7 +12,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -25,14 +29,23 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gdacciaro.iOSDialog.iOSDialog;
 import com.gdacciaro.iOSDialog.iOSDialogBuilder;
 import com.gdacciaro.iOSDialog.iOSDialogClickListener;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
+import net.colindodd.toggleimagebutton.ToggleImageButton;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
@@ -46,21 +59,28 @@ public class MainActivity extends AppCompatActivity {
     String btDeviceAddress = null;
     String btDeviceName = null;
 
-    String message ="";
+    String logo_path="",bg_path="";
+
+    CircularImageView iv_app_logo;
+    ImageView iv_app_bg;
+
+    RelativeLayout container;
+
+
     TextView tv_connetivity_status;
+    boolean isMasterSwitch = false;
 
     private boolean isBtConnected = false;
     static UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     MyApplication myApplication;
 
-    RadioGroup radioGroup1, radioGroup2, radioGroup3, radioGroup4;
     BluetoothAdapter bluetoothadapter = null;
-    private boolean isChecking = true;
 
-    RadioButton toggle_button_one, toggle_button_two, toggle_button_three, toggle_button_four,
+    ToggleImageButton toggle_button_one, toggle_button_two, toggle_button_three, toggle_button_four,
             toggle_button_five, toggle_button_six, toggle_button_seven, toggle_button_eight;
-    int mCheckedId;
+
+    TextView tv_btn_one,tv_btn_two,tv_btn_three,tv_btn_four,tv_btn_five,tv_btn_six,tv_btn_seven,tv_btn_eight;
 
     @Override
     protected void onDestroy() {
@@ -75,13 +95,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
-        btDeviceAddress = sp.getString("device_address", null);
-        btDeviceName = sp.getString("device_name", null);*/
-
+        //SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
         System.out.println(btDeviceName+" : "+btDeviceAddress);
 
+
         initializeaAll();
+        loadButtonText();
+
+        getImagePath();
+        if(!logo_path.equals(""))
+            loadLogo(logo_path);
+        if(!bg_path.equals(""))
+            loadBackground(bg_path);
+
 
         turnOnBt();
         changeStatusBarColor();
@@ -91,115 +117,224 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(SwitchView switchView, boolean isChecked) {
 
                     if(isChecked) {
+                        isMasterSwitch = true;
+                        toggle_button_one.setChecked(true);
+                        toggle_button_two.setChecked(true);
+                        toggle_button_three.setChecked(true);
+                        toggle_button_four.setChecked(true);
+                        toggle_button_five.setChecked(true);
+                        toggle_button_six.setChecked(true);
+                        toggle_button_seven.setChecked(true);
+                        toggle_button_eight.setChecked(true);
                         sendDataToDevice("y");
-                        checkAllButtons();
                     }
                     else{
+                        isMasterSwitch =false;
+                        toggle_button_one.setChecked(false);
+                        toggle_button_two.setChecked(false);
+                        toggle_button_three.setChecked(false);
+                        toggle_button_four.setChecked(false);
+                        toggle_button_five.setChecked(false);
+                        toggle_button_six.setChecked(false);
+                        toggle_button_seven.setChecked(false);
+                        toggle_button_eight.setChecked(false);
                         sendDataToDevice("x");
-                        clearCheck(1234);
                     }
             }
         });
 
-        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+        toggle_button_one.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    clearCheck(234);
-                    radioGroup1.check(checkedId);
-                    mCheckedId = checkedId;
-                    if(toggle_button_one.isChecked())
-                    {
-                        System.out.println("---A");
-                        sendDataToDevice("a");
-                    }
-                    if(toggle_button_two.isChecked()) {
-                        System.out.println("---B");
-                        sendDataToDevice("b");
-                    }
+            public void onClick(View v) {
+                if(toggle_button_one.isChecked() && !isMasterSwitch)
+                {
+                    toggle_button_two.setChecked(false);
+                    toggle_button_three.setChecked(false);
+                    toggle_button_four.setChecked(false);
+                    toggle_button_five.setChecked(false);
+                    toggle_button_six.setChecked(false);
+                    toggle_button_seven.setChecked(false);
+                    toggle_button_eight.setChecked(false);
+                    sendDataToDevice("a");
                 }
-                isChecking = true;
-            }
-        });
-
-        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    clearCheck(134);
-                    radioGroup2.check(checkedId);
-                    mCheckedId = checkedId;
-                    if(toggle_button_three.isChecked())
-                    {
-                        System.out.println("---C");
-                        sendDataToDevice("c");
-                    }
-                    if(toggle_button_four.isChecked())
-                    {
-                        System.out.println("---D");
-                        sendDataToDevice("d");
-                    }
+                if(!toggle_button_one.isChecked() && !isMasterSwitch)
+                {
+                    sendDataToDevice("0");
                 }
-                isChecking = true;
             }
         });
 
-        radioGroup3.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        toggle_button_two.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId != -1 && isChecking) {
-                    isChecking = false;
-                    clearCheck(124);
-                    radioGroup3.check(checkedId);
-                    mCheckedId = checkedId;
-                    if(toggle_button_five.isChecked()){
-                        System.out.println("---E");
-                        sendDataToDevice("e");
-                    }
-                    if(toggle_button_six.isChecked()){
-                        System.out.println("---F");
-                        sendDataToDevice("f");
-                    }
+            public void onClick(View v) {
+                if(toggle_button_two.isChecked() && !isMasterSwitch)
+                {
+                    toggle_button_one.setChecked(false);
+                    toggle_button_three.setChecked(false);
+                    toggle_button_four.setChecked(false);
+                    toggle_button_five.setChecked(false);
+                    toggle_button_six.setChecked(false);
+                    toggle_button_seven.setChecked(false);
+                    toggle_button_eight.setChecked(false);
+                    sendDataToDevice("b");
                 }
-                isChecking = true;
-
+                if(!toggle_button_two.isChecked() && !isMasterSwitch)
+                {
+                    sendDataToDevice("0");
+                }
             }
         });
-
-        radioGroup4.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        toggle_button_three.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId != -1 && isChecking) {
-                        isChecking = false;
-                        clearCheck(123);
-                        radioGroup4.check(checkedId);
-                        mCheckedId = checkedId;
-                        if (toggle_button_seven.isChecked()) {
-                            System.out.println("---G");
-                            sendDataToDevice("g");
-                        }
-                        if (toggle_button_eight.isChecked()) {
-                            System.out.println("---H");
-                            sendDataToDevice("h");
-                        }
-                    }
-                isChecking = true;
+            public void onClick(View v) {
+                if(toggle_button_three.isChecked() && !isMasterSwitch)
+                {
+                    toggle_button_two.setChecked(false);
+                    toggle_button_one.setChecked(false);
+                    toggle_button_four.setChecked(false);
+                    toggle_button_five.setChecked(false);
+                    toggle_button_six.setChecked(false);
+                    toggle_button_seven.setChecked(false);
+                    toggle_button_eight.setChecked(false);
+                    sendDataToDevice("c");
+
+                }
+                if(!toggle_button_three.isChecked() && !isMasterSwitch)
+                {
+                    sendDataToDevice("0");
+                }
             }
         });
+
+        toggle_button_four.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(toggle_button_four.isChecked() && !isMasterSwitch)
+                {
+                    toggle_button_two.setChecked(false);
+                    toggle_button_three.setChecked(false);
+                    toggle_button_one.setChecked(false);
+                    toggle_button_five.setChecked(false);
+                    toggle_button_six.setChecked(false);
+                    toggle_button_seven.setChecked(false);
+                    toggle_button_eight.setChecked(false);
+                    sendDataToDevice("d");
+                }
+                if(!toggle_button_four.isChecked() && !isMasterSwitch)
+                {
+                    sendDataToDevice("0");
+                }
+            }
+        });
+
+        toggle_button_five.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(toggle_button_five.isChecked() && !isMasterSwitch)
+                {
+                    toggle_button_two.setChecked(false);
+                    toggle_button_three.setChecked(false);
+                    toggle_button_four.setChecked(false);
+                    toggle_button_one.setChecked(false);
+                    toggle_button_six.setChecked(false);
+                    toggle_button_seven.setChecked(false);
+                    toggle_button_eight.setChecked(false);
+                    sendDataToDevice("e");
+                }
+                if(!toggle_button_five.isChecked() && !isMasterSwitch)
+                {
+                    sendDataToDevice("0");
+                }
+            }
+        });
+
+
+        toggle_button_six.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(toggle_button_six.isChecked() && !isMasterSwitch)
+                {
+                    toggle_button_two.setChecked(false);
+                    toggle_button_three.setChecked(false);
+                    toggle_button_four.setChecked(false);
+                    toggle_button_five.setChecked(false);
+                    toggle_button_one.setChecked(false);
+                    toggle_button_seven.setChecked(false);
+                    toggle_button_eight.setChecked(false);
+                    sendDataToDevice("f");
+                }
+                if(!toggle_button_six.isChecked() && !isMasterSwitch)
+                {
+                    sendDataToDevice("0");
+                }
+            }
+        });
+
+        toggle_button_seven.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(toggle_button_seven.isChecked() && !isMasterSwitch)
+                {
+                    toggle_button_two.setChecked(false);
+                    toggle_button_three.setChecked(false);
+                    toggle_button_four.setChecked(false);
+                    toggle_button_five.setChecked(false);
+                    toggle_button_six.setChecked(false);
+                    toggle_button_one.setChecked(false);
+                    toggle_button_eight.setChecked(false);
+                    sendDataToDevice("g");
+                }
+                if(!toggle_button_seven.isChecked() && !isMasterSwitch)
+                {
+                    sendDataToDevice("0");
+                }
+            }
+        });
+
+        toggle_button_eight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(toggle_button_eight.isChecked() && !isMasterSwitch)
+                {
+                    toggle_button_two.setChecked(false);
+                    toggle_button_three.setChecked(false);
+                    toggle_button_four.setChecked(false);
+                    toggle_button_five.setChecked(false);
+                    toggle_button_six.setChecked(false);
+                    toggle_button_seven.setChecked(false);
+                    toggle_button_one.setChecked(false);
+                    sendDataToDevice("h");
+                }
+                if(!toggle_button_eight.isChecked() && !isMasterSwitch)
+                {
+                    sendDataToDevice("0");
+                }
+            }
+        });
+
     }
     @Override
     protected void onResume() {
         super.onResume();
-        SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
+        //SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
         //btDeviceAddress = sp.getString("device_address",null);
         //btDeviceName = sp.getString("device_name",null);
+
+        getImagePath();
+        if(!logo_path.equals(""))
+            loadLogo(logo_path);
+        if(!bg_path.equals(""))
+            loadBackground(bg_path);
+
+
         btDeviceName = myApplication.deviceName;
         btDeviceAddress = myApplication.deviceAddress;
         System.out.println(btDeviceName+" : "+btDeviceAddress);
         if(!btDeviceName.equals(""))
             tv_connetivity_status.setText(btDeviceName+" Connected");
+
+        loadButtonText();
     }
 
     private void initializeaAll(){
@@ -207,11 +342,6 @@ public class MainActivity extends AppCompatActivity {
         myApplication = (MyApplication)getApplication();
 
         bluetoothadapter = BluetoothAdapter.getDefaultAdapter();
-
-        radioGroup1 = findViewById(R.id.radioGroup1);
-        radioGroup2 = findViewById(R.id.radioGroup2);
-        radioGroup3 = findViewById(R.id.radioGroup3);
-        radioGroup4 = findViewById(R.id.radioGroup4);
 
         toggle_button_one = findViewById(R.id.toggle_button_one);
         toggle_button_two = findViewById(R.id.toggle_button_two);
@@ -221,6 +351,21 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_six = findViewById(R.id.toggle_button_six);
         toggle_button_seven = findViewById(R.id.toggle_button_seven);
         toggle_button_eight = findViewById(R.id.toggle_button_eight);
+
+
+        tv_btn_one = findViewById(R.id.tv_btn_one);
+        tv_btn_two = findViewById(R.id.tv_btn_two);
+        tv_btn_three = findViewById(R.id.tv_btn_three);
+        tv_btn_four = findViewById(R.id.tv_btn_four);
+        tv_btn_five = findViewById(R.id.tv_btn_five);
+        tv_btn_six = findViewById(R.id.tv_btn_six);
+        tv_btn_seven = findViewById(R.id.tv_btn_seven);
+        tv_btn_eight = findViewById(R.id.tv_btn_eight);
+
+        iv_app_bg = findViewById(R.id.iv_app_bg);
+        iv_app_logo = findViewById(R.id.iv_logo);
+
+        container = findViewById(R.id.container);
 
         tv_connetivity_status = findViewById(R.id.tv_connetivity_status);
 
@@ -255,78 +400,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showDilogueBox() {
-        new iOSDialogBuilder(MainActivity.this)
-                .setTitle("Connect Device")
-                .setSubtitle("Please connect to device.")
-                .setBoldPositiveLabel(true)
-                .setCancelable(false)
-                .setPositiveListener("OK",new iOSDialogClickListener() {
-                    @Override
-                    public void onClick(iOSDialog dialog) {
-                        startActivity(new Intent(MainActivity.this,DevicesActivity.class));
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeListener("Cancel", new iOSDialogClickListener() {
-                    @Override
-                    public void onClick(iOSDialog dialog) {
-                        dialog.dismiss();
-                    }
-                })
-                .build().show();
-    }
-
     private void showToast(String s) {
         Toasty.info(getApplicationContext(),s,Toasty.LENGTH_SHORT,true).show();
     }
 
-    public void makeDeviceDiscoverable() {
-        Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,10);
-        startActivity(discoverableIntent);
-
-        IntentFilter filter1 = new IntentFilter(bluetoothadapter.ACTION_STATE_CHANGED);
-        registerReceiver(btDiscoverReceiver, filter1);
-
-    }
-
     public void goToSettings(View v){
         startActivity(new Intent(MainActivity.this,Settings.class));
-    }
-
-    /*public void goToPairedDevices(View v){
-        startActivity(new Intent(MainActivity.this,DevicesActivity.class));
-    }
-*/
-    private void clearCheck(int num) {
-        if(radioGroup1.getCheckedRadioButtonId() != -1)
-            radioGroup1.clearCheck();
-        if(num==234)
-        {
-            radioGroup2.clearCheck();
-            radioGroup3.clearCheck();
-            radioGroup4.clearCheck();
-        }
-        if(num==134)
-        {
-            radioGroup1.clearCheck();
-            radioGroup3.clearCheck();
-            radioGroup4.clearCheck();
-        }
-        if(num==124)
-        {
-            radioGroup1.clearCheck();
-            radioGroup2.clearCheck();
-            radioGroup4.clearCheck();
-        }
-        if(num==123)
-        {
-            radioGroup1.clearCheck();
-            radioGroup2.clearCheck();
-            radioGroup3.clearCheck();
-        }
-
     }
 
     private final BroadcastReceiver btStateReceiver = new BroadcastReceiver() {
@@ -360,32 +439,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private final BroadcastReceiver btDiscoverReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED)) {
-                int mode =intent.getIntExtra(bluetoothadapter.EXTRA_SCAN_MODE,bluetoothadapter.ERROR);
-                switch(mode){
-                    case BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE:
-                        Log.d("Bluetooth","discoverability enabled");
-                        break;
-                    case BluetoothAdapter.SCAN_MODE_CONNECTABLE:
-                        Log.d("Bluetooth","discoverability enabled, able to receive connection");
-                        break;
-                    case BluetoothAdapter.SCAN_MODE_NONE:
-                        Log.d("Bluetooth","discoverability disbled");
-                        break;
-                    case BluetoothAdapter.STATE_CONNECTING:
-                        Log.d("Bluetooth","Connecting");
-                        break;
-                    case BluetoothAdapter.STATE_CONNECTED:
-                        Log.d("Bluetooth","Connected");
-                        break;
-                }
-            }
-        }
-    };
-
     private void sendDataToDevice(String data)
     {
         if(myApplication.deviceAddress.equals(""))
@@ -393,10 +446,17 @@ public class MainActivity extends AppCompatActivity {
             showToast("Please Connect to Device");
             startActivity(new Intent(MainActivity.this,DevicesActivity.class));
             switchView.setChecked(false);
+            toggle_button_one.setChecked(false);
+            toggle_button_two.setChecked(false);
+            toggle_button_three.setChecked(false);
+            toggle_button_four.setChecked(false);
+            toggle_button_five.setChecked(false);
+            toggle_button_six.setChecked(false);
+            toggle_button_seven.setChecked(false);
+            toggle_button_eight.setChecked(false);
         }
         else
         {
-
             if (myApplication.bluetoothSocket!=null)
             {
                 try
@@ -485,14 +545,63 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkAllButtons()
+    private void loadButtonText()
     {
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
+        String one,two,three,four,five,six,seven,eight;
 
+        one = sp.getString("button_one","Button 1");
+        two = sp.getString("button_two","Button 2");
+        three = sp.getString("button_three","Button 3");
+        four = sp.getString("button_four","Button 4");
+        five = sp.getString("button_five","Button 5");
+        six = sp.getString("button_six","Button 6");
+        seven = sp.getString("button_seven","Button 7");
+        eight = sp.getString("button_eight","Button 8");
+
+        tv_btn_one.setText(one);
+        tv_btn_two.setText(two);
+        tv_btn_three.setText(three);
+        tv_btn_four.setText(four);
+        tv_btn_five.setText(five);
+        tv_btn_six.setText(six);
+        tv_btn_seven.setText(seven);
+        tv_btn_eight.setText(eight);
     }
 
-    private void uncheckAllButtons()
+    private void getImagePath()
     {
+        SharedPreferences sp = getApplicationContext().getSharedPreferences("usmart_sp", 0);
+        logo_path = sp.getString("usmart_logo","");
+        bg_path = sp.getString("usmart_background","");
 
+        System.out.println("PATH "+logo_path);
+        System.out.println("PATH "+bg_path);
     }
+
+    private void loadLogo(String path) {
+        File imgFile = new  File(path);
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            iv_app_logo.setImageBitmap(myBitmap);
+        };
+    }
+
+    private void loadBackground(String path) {
+        File imgFile = new  File(path);
+        System.out.println("BGG PAAAAATHHHHH "+path);
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            iv_app_bg.setImageBitmap(myBitmap);
+            Drawable dr = new BitmapDrawable(myBitmap);
+            container.setBackgroundDrawable(null);
+            container.setBackgroundDrawable(dr);
+        };
+    }
+
+
+
+
+
 
 }
