@@ -81,8 +81,6 @@ public class ThemeSettingsActivity extends AppCompatActivity {
                 startActivityForResult(intent,BG_GALLERY_INTENT);
             }
         });
-
-
     }
 
     @Override

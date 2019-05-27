@@ -156,11 +156,11 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_six.setChecked(false);
                     toggle_button_seven.setChecked(false);
                     toggle_button_eight.setChecked(false);
-                    sendDataToDevice("a");
+                    sendDataToDevice("a1");
                 }
                 if(!toggle_button_one.isChecked() && !isMasterSwitch)
                 {
-                    sendDataToDevice("0");
+                    sendDataToDevice("a0");
                 }
             }
         });
@@ -177,11 +177,11 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_six.setChecked(false);
                     toggle_button_seven.setChecked(false);
                     toggle_button_eight.setChecked(false);
-                    sendDataToDevice("b");
+                    sendDataToDevice("b1");
                 }
                 if(!toggle_button_two.isChecked() && !isMasterSwitch)
                 {
-                    sendDataToDevice("0");
+                    sendDataToDevice("b0");
                 }
             }
         });
@@ -197,12 +197,12 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_six.setChecked(false);
                     toggle_button_seven.setChecked(false);
                     toggle_button_eight.setChecked(false);
-                    sendDataToDevice("c");
+                    sendDataToDevice("c1");
 
                 }
                 if(!toggle_button_three.isChecked() && !isMasterSwitch)
                 {
-                    sendDataToDevice("0");
+                    sendDataToDevice("c0");
                 }
             }
         });
@@ -219,11 +219,11 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_six.setChecked(false);
                     toggle_button_seven.setChecked(false);
                     toggle_button_eight.setChecked(false);
-                    sendDataToDevice("d");
+                    sendDataToDevice("d1");
                 }
                 if(!toggle_button_four.isChecked() && !isMasterSwitch)
                 {
-                    sendDataToDevice("0");
+                    sendDataToDevice("d0");
                 }
             }
         });
@@ -240,11 +240,11 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_six.setChecked(false);
                     toggle_button_seven.setChecked(false);
                     toggle_button_eight.setChecked(false);
-                    sendDataToDevice("e");
+                    sendDataToDevice("e1");
                 }
                 if(!toggle_button_five.isChecked() && !isMasterSwitch)
                 {
-                    sendDataToDevice("0");
+                    sendDataToDevice("e0");
                 }
             }
         });
@@ -262,11 +262,11 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_one.setChecked(false);
                     toggle_button_seven.setChecked(false);
                     toggle_button_eight.setChecked(false);
-                    sendDataToDevice("f");
+                    sendDataToDevice("f1");
                 }
                 if(!toggle_button_six.isChecked() && !isMasterSwitch)
                 {
-                    sendDataToDevice("0");
+                    sendDataToDevice("f0");
                 }
             }
         });
@@ -283,11 +283,11 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_six.setChecked(false);
                     toggle_button_one.setChecked(false);
                     toggle_button_eight.setChecked(false);
-                    sendDataToDevice("g");
+                    sendDataToDevice("g1");
                 }
                 if(!toggle_button_seven.isChecked() && !isMasterSwitch)
                 {
-                    sendDataToDevice("0");
+                    sendDataToDevice("g0");
                 }
             }
         });
@@ -304,11 +304,11 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_six.setChecked(false);
                     toggle_button_seven.setChecked(false);
                     toggle_button_one.setChecked(false);
-                    sendDataToDevice("h");
+                    sendDataToDevice("h1");
                 }
                 if(!toggle_button_eight.isChecked() && !isMasterSwitch)
                 {
-                    sendDataToDevice("0");
+                    sendDataToDevice("h0");
                 }
             }
         });
