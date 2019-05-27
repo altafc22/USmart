@@ -462,6 +462,7 @@ public class MainActivity extends AppCompatActivity {
                 try
                 {
                     System.out.println("Trying to send data");
+                    System.out.println("-- "+data);
                     myApplication.bluetoothSocket.getOutputStream().write(data.getBytes());
                 }
                 catch (IOException e)
