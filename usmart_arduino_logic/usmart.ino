@@ -19,46 +19,43 @@ void loop()
     Serial.print(Incoming_value);   
     Serial.print("\n");        //New line 
   if(Incoming_value == "a1")
-  {  
     digitalWrite(13, HIGH);
-    Serial.print("One ");
-  }
-  else
-    digitalWrite(13, LOW); 
-  
+  if(Incoming_value == "a0")
+    digitalWrite(13, LOW);
+
   if(Incoming_value == "b1")
     digitalWrite(12, HIGH);
-  else
-    digitalWrite(12, LOW); 
-  
+  if(Incoming_value == "b0")
+    digitalWrite(12, LOW);
+
   if(Incoming_value == "c1")
-    digitalWrite(11, HIGH); 
-  else
-    digitalWrite(11, LOW); 
-  
+    digitalWrite(11, HIGH);
+  if(Incoming_value == "c0")
+    digitalWrite(11, LOW);
+
   if(Incoming_value == "d1")
     digitalWrite(10, HIGH);
-  else
-    digitalWrite(10, LOW); 
-  
+  if(Incoming_value == "d0")
+    digitalWrite(10, LOW);
+
   if(Incoming_value == "e1")
-    digitalWrite(9, HIGH); 
-  else
-    digitalWrite(9, LOW); 
-  
+    digitalWrite(9, HIGH);
+  if(Incoming_value == "e0")
+    digitalWrite(9, LOW);
+
   if(Incoming_value == "f1")
     digitalWrite(8, HIGH);
-  else
+  if(Incoming_value == "f0")
     digitalWrite(8, LOW);
 
   if(Incoming_value == "g1")
-    digitalWrite(7, HIGH); 
-  else
-    digitalWrite(7, LOW); 
-  
+    digitalWrite(7, HIGH);
+  if(Incoming_value == "g0")
+    digitalWrite(7, LOW);
+
   if(Incoming_value == "h1")
     digitalWrite(6, HIGH);
-  else
+  if(Incoming_value == "h0")
     digitalWrite(6, LOW); 
   if(Incoming_value=="y")
     { 

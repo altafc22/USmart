@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_one.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle_button_one.isChecked() && !isMasterSwitch)
+                if(toggle_button_one.isChecked())
                 {
                     toggle_button_two.setChecked(false);
                     toggle_button_three.setChecked(false);
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_eight.setChecked(false);
                     sendDataToDevice("a1");
                 }
-                if(!toggle_button_one.isChecked() && !isMasterSwitch)
+                if(!toggle_button_one.isChecked())
                 {
                     sendDataToDevice("a0");
                 }
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_two.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle_button_two.isChecked() && !isMasterSwitch)
+                if(toggle_button_two.isChecked())
                 {
                     toggle_button_one.setChecked(false);
                     toggle_button_three.setChecked(false);
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_eight.setChecked(false);
                     sendDataToDevice("b1");
                 }
-                if(!toggle_button_two.isChecked() && !isMasterSwitch)
+                if(!toggle_button_two.isChecked())
                 {
                     sendDataToDevice("b0");
                 }
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_three.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle_button_three.isChecked() && !isMasterSwitch)
+                if(toggle_button_three.isChecked())
                 {
                     toggle_button_two.setChecked(false);
                     toggle_button_one.setChecked(false);
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                     sendDataToDevice("c1");
 
                 }
-                if(!toggle_button_three.isChecked() && !isMasterSwitch)
+                if(!toggle_button_three.isChecked())
                 {
                     sendDataToDevice("c0");
                 }
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_four.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle_button_four.isChecked() && !isMasterSwitch)
+                if(toggle_button_four.isChecked())
                 {
                     toggle_button_two.setChecked(false);
                     toggle_button_three.setChecked(false);
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_eight.setChecked(false);
                     sendDataToDevice("d1");
                 }
-                if(!toggle_button_four.isChecked() && !isMasterSwitch)
+                if(!toggle_button_four.isChecked())
                 {
                     sendDataToDevice("d0");
                 }
@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_five.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle_button_five.isChecked() && !isMasterSwitch)
+                if(toggle_button_five.isChecked())
                 {
                     toggle_button_two.setChecked(false);
                     toggle_button_three.setChecked(false);
@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_eight.setChecked(false);
                     sendDataToDevice("e1");
                 }
-                if(!toggle_button_five.isChecked() && !isMasterSwitch)
+                if(!toggle_button_five.isChecked())
                 {
                     sendDataToDevice("e0");
                 }
@@ -253,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_six.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle_button_six.isChecked() && !isMasterSwitch)
+                if(toggle_button_six.isChecked())
                 {
                     toggle_button_two.setChecked(false);
                     toggle_button_three.setChecked(false);
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_eight.setChecked(false);
                     sendDataToDevice("f1");
                 }
-                if(!toggle_button_six.isChecked() && !isMasterSwitch)
+                if(!toggle_button_six.isChecked())
                 {
                     sendDataToDevice("f0");
                 }
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_seven.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle_button_seven.isChecked() && !isMasterSwitch)
+                if(toggle_button_seven.isChecked())
                 {
                     toggle_button_two.setChecked(false);
                     toggle_button_three.setChecked(false);
@@ -285,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_eight.setChecked(false);
                     sendDataToDevice("g1");
                 }
-                if(!toggle_button_seven.isChecked() && !isMasterSwitch)
+                if(!toggle_button_seven.isChecked())
                 {
                     sendDataToDevice("g0");
                 }
@@ -295,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
         toggle_button_eight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(toggle_button_eight.isChecked() && !isMasterSwitch)
+                if(toggle_button_eight.isChecked())
                 {
                     toggle_button_two.setChecked(false);
                     toggle_button_three.setChecked(false);
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
                     toggle_button_one.setChecked(false);
                     sendDataToDevice("h1");
                 }
-                if(!toggle_button_eight.isChecked() && !isMasterSwitch)
+                if(!toggle_button_eight.isChecked())
                 {
                     sendDataToDevice("h0");
                 }
